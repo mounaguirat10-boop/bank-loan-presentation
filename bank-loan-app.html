@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>بنك المستقبل - Mouna Guirat</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --blue:#c9860a;--blue2:#f59e0b;--blue-lt:#fef3c7;
+  --teal:#b45309;--teal-lt:#fde68a;
+  --amber:#d97706;--amber-lt:#fef3c7;
+  --red:#dc2626;--red-lt:#fee2e2;
+  --purple:#92400e;--purple-lt:#fef3c7;
+  --dark:#080502;--dark2:#0f0a06;--dark3:#1c1409;
+  --white:#fff;--gray:#78716c;--gray-lt:#faf7f2;
+  --text:#1c1409;--text2:#44403c;
+  --gold:#f59e0b;--gold2:#fbbf24;--gold3:#fde68a;
+  --copper:#c2410c;--rose:#be185d;
+}
+html,body{width:100%;height:100%;font-family:'Tajawal',sans-serif;background:#080502;overflow:hidden;color:var(--white)}
+
+/* ── CINEMATIC BACKGROUND ── */
+#bg-canvas{position:fixed;inset:0;z-index:0;pointer-events:none}
+
+/* ── DEVELOPER STRIP ── */
+#dev-strip{
+  position:fixed;top:0;left:0;right:0;height:40px;
+  background:rgba(8,5,2,0.97);
+  backdrop-filter:blur(8px);
+  border-bottom:1px solid rgba(245,158,11,0.15);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 28px;z-index:300;
+}
+.dev-left{display:flex;align-items:center;gap:10px}
+.dev-avatar{
+  width:28px;height:28px;border-radius:50%;
+  background:linear-gradient(135deg,#c2410c,#f59e0b);
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:800;color:#fff;flex-shrink:0;
+}
+.dev-name{color:#fff;font-size:13px;font-weight:700}
+.dev-role{color:rgba(255,255,255,0.45);font-size:11px}
+.dev-right{display:flex;align-items:center;gap:16px}
+.dev-link{color:rgba(255,255,255,0.65);font-size:11px;text-decoration:none;transition:color .2s}
+.dev-link:hover{color:#fff}
+
+/* ── PROGRESS ── */
+#prog{position:fixed;top:40px;left:0;height:3px;background:linear-gradient(90deg,#c2410c,#f59e0b,#fbbf24);transition:width .4s ease;z-index:200}
+
+/* ── SLIDES ── */
+#pres{position:fixed;inset:0;top:40px;z-index:10}
+.slide{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:20px 40px 60px;
+  opacity:0;pointer-events:none;
+  transition:opacity .7s ease,transform .7s ease;
+  transform:translateY(30px);
+}
+.slide.active{opacity:1;pointer-events:all;transform:translateY(0)}
+.slide.exit{opacity:0;transform:translateY(-30px)}
+
+/* ── CONTROLS ── */
+#controls{
+  position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
+  display:flex;align-items:center;gap:10px;
+  background:rgba(20,12,4,0.92);
+  backdrop-filter:blur(12px);
+  border:1px solid rgba(245,158,11,0.18);
+  border-radius:50px;padding:8px 20px;z-index:300;
+}
+#controls button{
+  background:none;border:none;color:rgba(255,255,255,0.8);
+  font-size:18px;cursor:pointer;padding:6px 8px;border-radius:50%;
+  transition:background .2s,color .2s;
+}
+#controls button:hover{background:rgba(255,255,255,0.1);color:#fff}
+#ctr{font-size:12px;color:rgba(255,255,255,0.5);min-width:50px;text-align:center}
+#mbtn{background:rgba(245,158,11,0.15)!important;color:#f59e0b!important}
+#mbtn.on{background:rgba(194,65,12,0.2)!important;color:#fb923c!important}
+
+/* ── DOTS ── */
+#dots{
+  position:fixed;right:20px;top:50%;transform:translateY(-50%);
+  display:flex;flex-direction:column;gap:7px;z-index:200;
+}
+.dot{
+  width:7px;height:7px;border-radius:50%;
+  background:rgba(255,255,255,0.25);cursor:pointer;
+  transition:all .3s;
+}
+.dot.active{background:#f59e0b;transform:scale(1.5)}
+
+/* ── TIMER ── */
+#tring{position:fixed;bottom:20px;right:20px;z-index:200}
+#tring circle{fill:none;stroke:rgba(255,255,255,0.1);stroke-width:3}
+#tring .tp{stroke:#f59e0b;stroke-width:3;stroke-linecap:round;stroke-dasharray:113;stroke-dashoffset:113;transform:rotate(-90deg);transform-origin:center;transition:stroke-dashoffset .1s linear}
+
+/* ──────────────────────────────────────── */
+/* SLIDE STYLES */
+/* ──────────────────────────────────────── */
+
+/* SLIDE 1 – HERO */
+.hero-chip{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(245,158,11,0.12);
+  border:1px solid rgba(245,158,11,0.28);
+  border-radius:50px;padding:7px 18px;
+  font-size:13px;color:#fbbf24;
+  margin-bottom:22px;
+}
+.pulse{width:8px;height:8px;border-radius:50%;background:#f59e0b;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.5)}}
+.hero-title{font-size:clamp(34px,4.5vw,62px);font-weight:900;line-height:1.1;text-align:center;margin-bottom:14px;color:#fff}
+.hero-title .accent{
+  background:linear-gradient(135deg,#f59e0b,#fb923c,#fbbf24);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.hero-sub{font-size:clamp(14px,1.6vw,19px);color:rgba(255,255,255,0.6);text-align:center;max-width:560px;line-height:1.65;margin-bottom:30px}
+.hero-stats{display:flex;gap:16px;margin-bottom:26px;flex-wrap:wrap;justify-content:center}
+.hstat{
+  text-align:center;padding:16px 24px;
+  background:rgba(255,255,255,0.05);
+  border:1px solid rgba(255,255,255,0.1);
+  border-radius:14px;min-width:110px;
+}
+.hstat-v{font-size:26px;font-weight:900;color:#fff;display:block}
+.hstat-l{font-size:11px;color:rgba(255,255,255,0.45);margin-top:2px;display:block}
+.dev-card-hero{
+  display:flex;align-items:center;gap:14px;
+  background:rgba(255,255,255,0.05);
+  border:1px solid rgba(255,255,255,0.1);
+  border-radius:14px;padding:12px 22px;
+}
+.dav{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#c2410c,#f59e0b);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:900;color:#fff;flex-shrink:0}
+.dn{font-size:15px;font-weight:800;color:#fff}
+.dr{font-size:11px;color:rgba(255,255,255,0.5);margin-top:1px}
+.sep{width:1px;height:36px;background:rgba(255,255,255,0.12);margin:0 6px}
+.dem{font-size:11px;color:#fbbf24;text-decoration:none}
+.dgh{font-size:11px;color:rgba(255,255,255,0.5);text-decoration:none}
+
+/* SLIDE 2 – DASHBOARD (FULL) */
+.slbl{font-size:11px;font-weight:700;letter-spacing:2.5px;color:#f59e0b;text-transform:uppercase;margin-bottom:8px;text-align:center}
+.stitle{font-size:clamp(20px,2.8vw,34px);font-weight:900;color:#fff;text-align:center;margin-bottom:16px}
+
+/* SLIDE 2 FULLSCREEN */
+#s2{padding:6px 16px 52px;justify-content:flex-start;overflow-y:auto}
+#s2 .slbl{margin-top:4px}
+#s2 .stitle{margin-bottom:10px;font-size:clamp(16px,2vw,26px)}
+
+.db-wrap{
+  width:100%;max-width:100%;
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.1);
+  border-radius:16px;padding:12px 14px;
+  display:flex;flex-direction:column;gap:10px;
+}
+.db-topbar{
+  display:flex;justify-content:space-between;align-items:center;
+  padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,0.07);
+}
+.db-appname{font-size:13px;font-weight:800;color:#fff}
+.db-appname span{color:#f59e0b}
+.db-badges{display:flex;gap:6px}
+.badge{font-size:10px;padding:4px 10px;border-radius:6px;font-weight:700}
+.badge.live{background:rgba(5,150,105,0.2);color:#34d399;border:1px solid rgba(5,150,105,0.3)}
+.badge.tn{background:rgba(245,158,11,0.12);color:#fbbf24;border:1px solid rgba(245,158,11,0.2)}
+.badge.ai{background:rgba(194,65,12,0.15);color:#fb923c;border:1px solid rgba(194,65,12,0.2)}
+
+/* KPI row */
+.kpi-row{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
+.kpi{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:9px 11px;position:relative;overflow:hidden}
+.kpi::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;border-radius:0 0 12px 12px}
+.kpi.bl::after{background:#f59e0b}
+.kpi.gr::after{background:#c2410c}
+.kpi.am::after{background:var(--amber)}
+.kpi.rd::after{background:var(--red)}
+.kpi.pu::after{background:#d97706}
+.kpi.wh::after{background:#78716c}
+.kpi-lbl{font-size:9px;color:rgba(255,255,255,0.45);margin-bottom:2px}
+.kpi-val{font-size:17px;font-weight:900;color:#fff}
+.kpi-val.bl{color:#fbbf24}
+.kpi-val.gr{color:#fb923c}
+.kpi-val.am{color:#fbbf24}
+.kpi-val.rd{color:#f87171}
+.kpi-val.pu{color:#fdba74}
+.kpi-sub{font-size:8px;color:rgba(255,255,255,0.3);margin-top:1px}
+
+/* Charts grid */
+.charts-grid{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:8px}
+.chart-box{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:10px;padding:10px}
+.ct{font-size:10px;font-weight:700;color:rgba(255,255,255,0.6);margin-bottom:6px}
+
+/* bars */
+.bars{display:flex;align-items:flex-end;gap:4px;height:56px}
+.b{flex:1;border-radius:3px 3px 0 0;animation:grow .8s ease both;transform-origin:bottom}
+@keyframes grow{from{transform:scaleY(0);opacity:0}to{transform:scaleY(1);opacity:1}}
+
+/* donut */
+.donut-row{display:flex;align-items:center;gap:14px}
+.dleg{font-size:10px;display:flex;flex-direction:column;gap:5px}
+.dleg-item{display:flex;align-items:center;gap:5px;color:rgba(255,255,255,0.6)}
+.dleg-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+
+/* sparkline */
+.spark svg{width:100%;height:56px}
+
+/* gender row */
+.gender-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.gen-card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:10px;padding:8px 12px}
+.gen-icon{font-size:18px;margin-bottom:3px}
+.gen-num{font-size:20px;font-weight:900;color:#fff}
+.gen-pct{font-size:10px;color:rgba(255,255,255,0.4);margin-top:1px}
+.gen-bar{height:5px;border-radius:3px;background:rgba(255,255,255,0.1);margin-top:8px;overflow:hidden}
+.gen-fill{height:100%;border-radius:3px;animation:fillbar 1.2s ease both}
+@keyframes fillbar{from{width:0}to{}}
+
+/* edu table */
+.edu-wrap{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:10px;padding:8px 12px}
+.edu-row{display:flex;align-items:center;justify-content:space-between;padding:2px 0;border-bottom:1px solid rgba(255,255,255,0.04)}
+.edu-row:last-child{border-bottom:none}
+.edu-name{font-size:9px;color:rgba(255,255,255,0.6)}
+.edu-pct{font-size:9px;font-weight:700;color:#f59e0b}
+.edu-line{flex:1;height:3px;border-radius:2px;background:rgba(255,255,255,0.06);margin:0 8px;overflow:hidden}
+.edu-line-fill{height:100%;border-radius:2px;background:#f59e0b;animation:fillbar 1s ease both}
+
+/* regions */
+.reg-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:4px}
+.reg-item{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:6px;padding:4px 6px;text-align:center;font-size:9px;color:rgba(255,255,255,0.6)}
+.reg-item span{display:block;font-size:12px;font-weight:700;color:#f59e0b;margin-bottom:0}
+
+/* ai gauge */
+.gauge-row{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.metric{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:8px;padding:7px;text-align:center}
+.m-val{font-size:15px;font-weight:900;color:#fbbf24}
+.m-lbl{font-size:8px;color:rgba(255,255,255,0.4);margin-top:1px}
+.m-bar{height:3px;border-radius:2px;background:rgba(255,255,255,0.08);margin-top:6px;overflow:hidden}
+.m-fill{height:100%;border-radius:2px;background:#f59e0b;animation:fillbar 1.2s ease both}
+
+/* SLIDE 3 – AI */
+.ai-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:900px;width:100%}
+.ai-card{border-radius:16px;padding:22px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.04)}
+.ai-ico{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:12px}
+.ai-card h3{font-size:15px;font-weight:800;color:#fff;margin-bottom:7px}
+.ai-card p{font-size:12px;color:rgba(255,255,255,0.55);line-height:1.7}
+.mrow{margin-top:10px}
+.mlbl{display:flex;justify-content:space-between;font-size:10px;color:rgba(255,255,255,0.4);margin-bottom:3px}
+.mbar{height:5px;border-radius:3px;background:rgba(255,255,255,0.08)}
+.mfill{height:100%;border-radius:3px;animation:fillbar 1.5s ease both}
+
+/* SLIDE 4 – TECH */
+.tech-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;max-width:860px;width:100%}
+.tech-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:18px;text-align:center;transition:transform .25s,border-color .25s}
+.tech-card:hover{transform:translateY(-4px);border-color:rgba(59,130,246,0.35)}
+.tech-ico{width:50px;height:50px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;margin:0 auto 10px}
+.tech-name{font-size:13px;font-weight:800;color:#fff}
+.tech-desc{font-size:10px;color:rgba(255,255,255,0.4);margin-top:3px}
+
+/* SLIDE 5 – HOW */
+.steps{display:flex;align-items:flex-start;gap:0;max-width:960px;width:100%}
+.step{flex:1;text-align:center;position:relative;padding:0 8px}
+.step:not(:last-child)::after{content:'';position:absolute;top:25px;left:calc(50% + 28px);width:calc(100% - 56px);height:2px;background:linear-gradient(90deg,#c2410c,rgba(245,158,11,0.1))}
+.snum{width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,#c2410c,#f59e0b);color:#fff;font-size:18px;font-weight:900;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;position:relative;z-index:1}
+.stit{font-size:13px;font-weight:800;color:#fff;margin-bottom:5px}
+.sdesc{font-size:11px;color:rgba(255,255,255,0.45);line-height:1.6}
+
+/* SLIDE 6 – BENEFITS */
+.ben-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;max-width:920px;width:100%}
+.ben-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:20px}
+.ben-ico{font-size:26px;margin-bottom:10px;display:block}
+.ben-t{font-size:14px;font-weight:800;color:#fff;margin-bottom:5px}
+.ben-d{font-size:11px;color:rgba(255,255,255,0.5);line-height:1.6}
+.ben-num{font-size:26px;font-weight:900;color:#f59e0b;margin-top:10px;display:block}
+.ben-sl{font-size:10px;color:rgba(255,255,255,0.3)}
+
+/* SLIDE 7 – UNIQUE */
+.uniq-list{max-width:820px;width:100%;display:flex;flex-direction:column;gap:12px}
+.uniq{display:flex;align-items:flex-start;gap:14px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:16px 20px;border-right:4px solid #f59e0b}
+.unum{font-size:18px;font-weight:900;color:#f59e0b;min-width:28px}
+.utext h4{font-size:14px;font-weight:800;color:#fff;margin-bottom:3px}
+.utext p{font-size:12px;color:rgba(255,255,255,0.5)}
+
+/* SLIDE 8 – CTA */
+.cta-box{
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.12);
+  border-radius:28px;
+  padding:50px 70px;text-align:center;
+  max-width:680px;width:100%;
+  position:relative;overflow:hidden;
+}
+.cta-box::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 30% 50%,rgba(194,65,12,0.22) 0%,transparent 60%),
+              radial-gradient(ellipse at 70% 50%,rgba(245,158,11,0.15) 0%,transparent 60%);
+  pointer-events:none;
+}
+.cta-t{font-size:clamp(22px,3.5vw,40px);font-weight:900;color:#fff;margin-bottom:12px;position:relative}
+.cta-s{font-size:15px;color:rgba(255,255,255,0.6);margin-bottom:32px;line-height:1.65;position:relative}
+.cta-btn{
+  display:inline-block;
+  background:linear-gradient(135deg,#c2410c,#f59e0b);
+  color:#fff;font-size:15px;font-weight:800;
+  padding:14px 40px;border-radius:50px;
+  border:none;cursor:pointer;font-family:'Tajawal',sans-serif;
+  position:relative;transition:transform .2s,opacity .2s;
+}
+.cta-btn:hover{transform:scale(1.04);opacity:.92}
+.cta-dev{margin-top:30px;position:relative}
+.cta-devcard{
+  display:inline-flex;align-items:center;gap:14px;
+  background:rgba(255,255,255,0.07);
+  border:1px solid rgba(255,255,255,0.12);
+  border-radius:16px;padding:14px 24px;
+}
+.cdav{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#c2410c,#f59e0b);display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:900;color:#fff;flex-shrink:0}
+.cdn{font-size:16px;font-weight:900;color:#fff;text-align:right}
+.cdr{font-size:11px;color:rgba(255,255,255,0.5);text-align:right;margin-top:2px}
+.cdsep{width:1px;height:44px;background:rgba(255,255,255,0.12)}
+.cdlinks{display:flex;flex-direction:column;gap:5px;align-items:flex-start}
+.cdlink{font-size:11px;color:#f59e0b;text-decoration:none;transition:opacity .2s}
+.cdlink:hover{opacity:.75}
+
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+.a1{animation:fadeUp .5s .05s both}
+.a2{animation:fadeUp .5s .2s both}
+.a3{animation:fadeUp .5s .35s both}
+.a4{animation:fadeUp .5s .5s both}
+.a5{animation:fadeUp .5s .65s both}
+
+/* floating particles on canvas */
+</style>
+</head>
+<body>
+
+<!-- CANVAS BG -->
+<canvas id="bg-canvas"></canvas>
+
+<!-- DEV STRIP -->
+<div id="dev-strip">
+  <div class="dev-left">
+    <div class="dev-avatar">MG</div>
+    <span class="dev-name">Mouna Guirat</span>
+    <span class="dev-role">· مهندسة ذكاء اصطناعي · MG AI Solutions</span>
+  </div>
+  <div class="dev-right">
+    <a class="dev-link" href="mailto:mounaguirat10@gmail.com">✉ mounaguirat10@gmail.com</a>
+    <a class="dev-link" href="https://github.com/mounaguirat10" target="_blank">⌨ github.com/mounaguirat10</a>
+    <span style="color:rgba(255,255,255,0.3);font-size:11px">🇹🇳 2026</span>
+  </div>
+</div>
+
+<!-- PROGRESS -->
+<div id="prog" style="width:12.5%"></div>
+
+<!-- PRESENTATION -->
+<div id="pres">
+
+<!-- ═══════════════ SLIDE 1 – HERO ═══════════════ -->
+<div class="slide active" id="s1">
+  <div class="hero-chip a1"><div class="pulse"></div>حل ذكي · السوق التونسية</div>
+  <h1 class="hero-title a2">
+    <span class="accent">🏦 بنك المستقبل</span><br>
+    نظام تحليل وتوقع تعثر القروض
+  </h1>
+  <p class="hero-sub a3">منصة تجمع بين الذكاء الاصطناعي وذكاء الأعمال لتحويل قرارات الإقراض من تخمين إلى علم دقيق</p>
+  <div class="hero-stats a4">
+    <div class="hstat"><span class="hstat-v">95%+</span><span class="hstat-l">دقة التوقع</span></div>
+    <div class="hstat"><span class="hstat-v">3,000+</span><span class="hstat-l">عميل مُحلَّل</span></div>
+    <div class="hstat"><span class="hstat-v">&lt;1s</span><span class="hstat-l">زمن القرار</span></div>
+    <div class="hstat"><span class="hstat-v">15</span><span class="hstat-l">جهة تونسية</span></div>
+    <div class="hstat"><span class="hstat-v">10</span><span class="hstat-l">مستوى تعليمي</span></div>
+  </div>
+  <div class="dev-card-hero a5">
+    <div class="dav">MG</div>
+    <div><div class="dn">Mouna Guirat</div><div class="dr">مهندسة ذكاء اصطناعي · مطورة حلول مالية ذكية</div></div>
+    <div class="sep"></div>
+    <a class="dem" href="mailto:mounaguirat10@gmail.com">✉ mounaguirat10@gmail.com</a>
+    <a class="dgh" href="https://github.com/mounaguirat10" target="_blank">⌨ GitHub</a>
+  </div>
+</div>
+
+<!-- ═══════════════ SLIDE 2 – DASHBOARD ═══════════════ -->
+<div class="slide" id="s2">
+  <div class="slbl a1">📊 لوحة المتابعة الاحصائية</div>
+  <h2 class="stitle a2">لوحة البيانات الذكية — كل المؤشرات في مكان واحد</h2>
+
+  <div class="db-wrap a3">
+
+    <!-- TOP BAR -->
+    <div class="db-topbar">
+      <div>
+        <span class="db-appname">🏦 <span>بنك المستقبل</span> · لوحة المراقبة الذكية</span>
+        <div style="font-size:10px;color:rgba(255,255,255,0.3);margin-top:2px">بيانات لحظية · نظام تونسي · Mouna Guirat</div>
+      </div>
+      <div class="db-badges">
+        <span class="badge live">● مباشر</span>
+        <span class="badge tn">🇹🇳 تونس</span>
+        <span class="badge ai">🤖 AI مُفعَّل</span>
+      </div>
+    </div>
+
+    <!-- KPI ROW 6 CARDS -->
+    <div class="kpi-row">
+      <div class="kpi bl">
+        <div class="kpi-lbl">إجمالي العملاء</div>
+        <div class="kpi-val bl" id="cnt">3,000</div>
+        <div class="kpi-sub">↑ +127 هذا الشهر</div>
+      </div>
+      <div class="kpi gr">
+        <div class="kpi-lbl">إجمالي القروض</div>
+        <div class="kpi-val gr">125.4M</div>
+        <div class="kpi-sub">دينار تونسي</div>
+      </div>
+      <div class="kpi am">
+        <div class="kpi-lbl">متوسط الائتمان</div>
+        <div class="kpi-val am">641</div>
+        <div class="kpi-sub">من 850 نقطة</div>
+      </div>
+      <div class="kpi rd">
+        <div class="kpi-lbl">نسبة التعثر</div>
+        <div class="kpi-val rd">28.7%</div>
+        <div class="kpi-sub">↓ -3.2% هذا الشهر</div>
+      </div>
+      <div class="kpi pu">
+        <div class="kpi-lbl">دقة النموذج AI</div>
+        <div class="kpi-val pu">95.2%</div>
+        <div class="kpi-sub">F1-Score: 94.8%</div>
+      </div>
+      <div class="kpi wh">
+        <div class="kpi-lbl">متوسط القرض</div>
+        <div class="kpi-val" style="color:#e2e8f0">41,800</div>
+        <div class="kpi-sub">دينار تونسي</div>
+      </div>
+    </div>
+
+    <!-- CHARTS ROW -->
+    <div class="charts-grid">
+
+      <!-- BAR – credit -->
+      <div class="chart-box">
+        <div class="ct">توزيع درجات الائتمان</div>
+        <div class="bars">
+          <div class="b" style="height:25%;background:rgba(248,113,113,0.7);animation-delay:.05s"></div>
+          <div class="b" style="height:42%;background:rgba(251,146,60,0.7);animation-delay:.1s"></div>
+          <div class="b" style="height:65%;background:rgba(250,204,21,0.7);animation-delay:.15s"></div>
+          <div class="b" style="height:90%;background:rgba(52,211,153,0.9);animation-delay:.2s"></div>
+          <div class="b" style="height:75%;background:rgba(52,211,153,0.7);animation-delay:.25s"></div>
+          <div class="b" style="height:55%;background:rgba(96,165,250,0.7);animation-delay:.3s"></div>
+          <div class="b" style="height:30%;background:rgba(96,165,250,0.5);animation-delay:.35s"></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:9px;color:rgba(255,255,255,0.3);margin-top:3px">
+          <span>300</span><span>400</span><span>500</span><span>600</span><span>700</span><span>750</span><span>850</span>
+        </div>
+      </div>
+
+      <!-- DONUT – risk -->
+      <div class="chart-box">
+        <div class="ct">توزيع مستويات المخاطرة</div>
+        <div class="donut-row">
+          <svg width="80" height="80" viewBox="0 0 80 80">
+            <circle cx="40" cy="40" r="28" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="13"/>
+            <circle cx="40" cy="40" r="28" fill="none" stroke="#f59e0b" stroke-width="13" stroke-dasharray="70 106" stroke-dashoffset="0" transform="rotate(-90 40 40)"/>
+            <circle cx="40" cy="40" r="28" fill="none" stroke="#fbbf24" stroke-width="13" stroke-dasharray="44 132" stroke-dashoffset="-70" transform="rotate(-90 40 40)"/>
+            <circle cx="40" cy="40" r="28" fill="none" stroke="#f87171" stroke-width="13" stroke-dasharray="62 114" stroke-dashoffset="-114" transform="rotate(-90 40 40)"/>
+            <text x="40" y="44" text-anchor="middle" font-size="12" font-weight="800" fill="white" font-family="Tajawal">3K</text>
+          </svg>
+          <div class="dleg">
+            <div class="dleg-item"><div class="dleg-dot" style="background:#f59e0b"></div>منخفض · 40%</div>
+            <div class="dleg-item"><div class="dleg-dot" style="background:#fbbf24"></div>متوسط · 25%</div>
+            <div class="dleg-item"><div class="dleg-dot" style="background:#f87171"></div>مرتفع · 35%</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SPARK -->
+      <div class="chart-box">
+        <div class="ct">تطور القروض الشهري</div>
+        <div class="spark">
+          <svg viewBox="0 0 240 56" preserveAspectRatio="none">
+            <defs><linearGradient id="sg" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#f59e0b" stop-opacity=".2"/>
+              <stop offset="100%" stop-color="#f59e0b" stop-opacity="0"/>
+            </linearGradient></defs>
+            <path d="M0,44 C20,40 40,32 60,26 C80,20 100,28 120,18 C140,10 160,14 180,8 C200,4 220,6 240,3 L240,56 L0,56Z" fill="url(#sg)"/>
+            <path d="M0,44 C20,40 40,32 60,26 C80,20 100,28 120,18 C140,10 160,14 180,8 C200,4 220,6 240,3" fill="none" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round"/>
+            <circle cx="240" cy="3" r="4" fill="#f59e0b"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- GENDER + EDU + REGIONS -->
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+
+      <!-- GENDER -->
+      <div>
+        <div class="ct" style="margin-bottom:8px">توزيع العملاء حسب الجنس</div>
+        <div class="gender-row">
+          <div class="gen-card">
+            <div class="gen-icon">👨</div>
+            <div class="gen-num">1,558</div>
+            <div class="gen-pct">الذكور · 52%</div>
+            <div class="gen-bar"><div class="gen-fill" style="width:52%;background:#f59e0b"></div></div>
+          </div>
+          <div class="gen-card">
+            <div class="gen-icon">👩</div>
+            <div class="gen-num">1,442</div>
+            <div class="gen-pct">الإناث · 48%</div>
+            <div class="gen-bar"><div class="gen-fill" style="width:48%;background:#f472b6"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- EDU -->
+      <div class="edu-wrap">
+        <div class="ct">التوزيع حسب المستوى التعليمي التونسي</div>
+        <div class="edu-row"><span class="edu-name">شهادة الباكالوريا</span><div class="edu-line"><div class="edu-line-fill" style="width:22%"></div></div><span class="edu-pct">22%</span></div>
+        <div class="edu-row"><span class="edu-name">ليسانس</span><div class="edu-line"><div class="edu-line-fill" style="width:18%;animation-delay:.1s"></div></div><span class="edu-pct">18%</span></div>
+        <div class="edu-row"><span class="edu-name">ماجستير</span><div class="edu-line"><div class="edu-line-fill" style="width:14%;animation-delay:.2s"></div></div><span class="edu-pct">14%</span></div>
+        <div class="edu-row"><span class="edu-name">مهندس</span><div class="edu-line"><div class="edu-line-fill" style="width:11%;animation-delay:.3s"></div></div><span class="edu-pct">11%</span></div>
+        <div class="edu-row"><span class="edu-name">تقني سامي</span><div class="edu-line"><div class="edu-line-fill" style="width:10%;animation-delay:.4s"></div></div><span class="edu-pct">10%</span></div>
+        <div class="edu-row"><span class="edu-name">أخرى</span><div class="edu-line"><div class="edu-line-fill" style="width:25%;animation-delay:.5s"></div></div><span class="edu-pct">25%</span></div>
+      </div>
+
+      <!-- REGIONS -->
+      <div>
+        <div class="ct" style="margin-bottom:8px">الجهات التونسية الـ15</div>
+        <div class="reg-grid">
+          <div class="reg-item"><span>287</span>تونس</div>
+          <div class="reg-item"><span>241</span>صفاقس</div>
+          <div class="reg-item"><span>198</span>سوسة</div>
+          <div class="reg-item"><span>176</span>نابل</div>
+          <div class="reg-item"><span>163</span>بنزرت</div>
+          <div class="reg-item"><span>152</span>منستير</div>
+          <div class="reg-item"><span>141</span>قابس</div>
+          <div class="reg-item"><span>138</span>قفصة</div>
+          <div class="reg-item"><span>127</span>المهدية</div>
+          <div class="reg-item"><span>119</span>القيروان</div>
+          <div class="reg-item"><span>98</span>باجة</div>
+          <div class="reg-item"><span>87</span>جندوبة</div>
+          <div class="reg-item"><span>76</span>الكاف</div>
+          <div class="reg-item"><span>65</span>سليانة</div>
+          <div class="reg-item"><span>32</span>زغوان</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- AI METRICS BAR -->
+    <div>
+      <div class="ct" style="margin-bottom:8px">مؤشرات أداء نموذج الذكاء الاصطناعي</div>
+      <div class="gauge-row">
+        <div class="metric"><div class="m-val">95.2%</div><div class="m-lbl">Accuracy</div><div class="m-bar"><div class="m-fill" style="width:95.2%;background:#f59e0b"></div></div></div>
+        <div class="metric"><div class="m-val">94.8%</div><div class="m-lbl">F1-Score</div><div class="m-bar"><div class="m-fill" style="width:94.8%;background:#fbbf24;animation-delay:.1s"></div></div></div>
+        <div class="metric"><div class="m-val">97.1%</div><div class="m-lbl">AUC-ROC</div><div class="m-bar"><div class="m-fill" style="width:97.1%;background:#fb923c;animation-delay:.2s"></div></div></div>
+        <div class="metric"><div class="m-val">93.9%</div><div class="m-lbl">Precision</div><div class="m-bar"><div class="m-fill" style="width:93.9%;background:#f59e0b;animation-delay:.3s"></div></div></div>
+        <div class="metric"><div class="m-val">94.2%</div><div class="m-lbl">Recall</div><div class="m-bar"><div class="m-fill" style="width:94.2%;background:#fbbf24;animation-delay:.4s"></div></div></div>
+      </div>
+    </div>
+
+  </div><!-- end db-wrap -->
+</div>
+
+<!-- ═══════════════ SLIDE 3 – AI ═══════════════ -->
+<div class="slide" id="s3">
+  <div class="slbl a1">🤖 الذكاء الاصطناعي</div>
+  <h2 class="stitle a2">قرارات مدعومة بنماذج ML متقدمة</h2>
+  <div class="ai-grid a3">
+    <div class="ai-card">
+      <div class="ai-ico" style="background:rgba(245,158,11,0.13)">🌲</div>
+      <h3>Random Forest · 150 شجرة قرار</h3>
+      <p>نموذج تجميعي يحلّل 9 عوامل محورية لكل طلب قرض ويحسب احتمالية التعثر بدقة تتجاوز 95%</p>
+      <div class="mrow"><div class="mlbl"><span>دقة النموذج</span><span style="color:#f59e0b">95.2%</span></div><div class="mbar"><div class="mfill" style="width:95%;background:#f59e0b"></div></div></div>
+      <div class="mrow"><div class="mlbl"><span>AUC-ROC</span><span style="color:#fbbf24">97.1%</span></div><div class="mbar"><div class="mfill" style="width:97%;background:#fbbf24;animation-delay:.1s"></div></div></div>
+      <div class="mrow"><div class="mlbl"><span>F1-Score</span><span style="color:#fb923c">94.8%</span></div><div class="mbar"><div class="mfill" style="width:94%;background:#fb923c;animation-delay:.2s"></div></div></div>
+    </div>
+    <div class="ai-card">
+      <div class="ai-ico" style="background:rgba(5,150,105,0.15)">⚡</div>
+      <h3>تفسير فوري لكل قرار</h3>
+      <p>ليس صندوقاً أسود — كل توصية مُصحوبة بتفسير مفصّل لتأثير كل عامل</p>
+      <div style="margin-top:12px;display:flex;flex-direction:column;gap:7px">
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:8px;padding:8px 12px;display:flex;justify-content:space-between;align-items:center">
+          <span style="font-size:11px;color:rgba(255,255,255,0.55)">درجة الائتمان</span>
+          <span style="font-size:10px;font-weight:800;color:#f59e0b;background:rgba(59,130,246,0.12);padding:2px 8px;border-radius:5px">35% تأثير</span>
+        </div>
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:8px;padding:8px 12px;display:flex;justify-content:space-between;align-items:center">
+          <span style="font-size:11px;color:rgba(255,255,255,0.55)">نسبة الدين للدخل</span>
+          <span style="font-size:10px;font-weight:800;color:#f59e0b;background:rgba(59,130,246,0.12);padding:2px 8px;border-radius:5px">25% تأثير</span>
+        </div>
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:8px;padding:8px 12px;display:flex;justify-content:space-between;align-items:center">
+          <span style="font-size:11px;color:rgba(255,255,255,0.55)">التعثرات السابقة</span>
+          <span style="font-size:10px;font-weight:800;color:#f59e0b;background:rgba(59,130,246,0.12);padding:2px 8px;border-radius:5px">20% تأثير</span>
+        </div>
+      </div>
+    </div>
+    <div class="ai-card">
+      <div class="ai-ico" style="background:rgba(124,58,237,0.15)">🎯</div>
+      <h3>ثلاث توصيات فورية</h3>
+      <p>كل طلب يُصنَّف تلقائياً بوضوح تام</p>
+      <div style="margin-top:12px;display:flex;flex-direction:column;gap:7px">
+        <div style="background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.2);border-radius:8px;padding:9px 13px;font-size:12px;font-weight:800;color:#f59e0b">✅ قبول فوري — مخاطرة أقل من 30%</div>
+        <div style="background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.2);border-radius:8px;padding:9px 13px;font-size:12px;font-weight:800;color:#fbbf24">⚠️ قبول بشروط — من 30% إلى 70%</div>
+        <div style="background:rgba(248,113,113,0.1);border:1px solid rgba(248,113,113,0.2);border-radius:8px;padding:9px 13px;font-size:12px;font-weight:800;color:#f87171">❌ رفض — مخاطرة أكبر من 70%</div>
+      </div>
+    </div>
+    <div class="ai-card">
+      <div class="ai-ico" style="background:rgba(217,119,6,0.15)">💬</div>
+      <h3>مساعد AI متخصص في القروض</h3>
+      <p>شات بوت يُجيب على أسئلة الموظفين والعملاء حول الشروط والمخاطر على مدار الساعة</p>
+      <div style="margin-top:12px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:10px;padding:10px">
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <div style="background:rgba(59,130,246,0.12);border-radius:8px;padding:6px 10px;font-size:11px;color:rgba(255,255,255,0.7);text-align:right">ما شروط القرض؟</div>
+          <div style="background:rgba(255,255,255,0.05);border-radius:8px;padding:6px 10px;font-size:11px;color:rgba(255,255,255,0.55);text-align:right">🤖 دخل 1500+، ائتمان 600+، عمر 22-70 سنة</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ SLIDE 4 – TECH ═══════════════ -->
+<div class="slide" id="s4">
+  <div class="slbl a1">⚙️ التقنيات المستخدمة</div>
+  <h2 class="stitle a2">مبني على أحدث التقنيات المفتوحة المصدر</h2>
+  <div class="tech-grid a3">
+    <div class="tech-card"><div class="tech-ico" style="background:rgba(59,130,246,0.12)">🐍</div><div class="tech-name">Python 3.11</div><div class="tech-desc">لغة البرمجة الأساسية</div></div>
+    <div class="tech-card"><div class="tech-ico" style="background:rgba(255,75,75,0.12)">⚡</div><div class="tech-name">Streamlit</div><div class="tech-desc">واجهة المستخدم التفاعلية</div></div>
+    <div class="tech-card"><div class="tech-ico" style="background:rgba(5,150,105,0.12)">🧠</div><div class="tech-name">Scikit-Learn</div><div class="tech-desc">نماذج الذكاء الاصطناعي</div></div>
+    <div class="tech-card"><div class="tech-ico" style="background:rgba(124,58,237,0.12)">📊</div><div class="tech-name">Plotly</div><div class="tech-desc">رسوم بيانية تفاعلية</div></div>
+    <div class="tech-card"><div class="tech-ico" style="background:rgba(217,119,6,0.12)">🐼</div><div class="tech-name">Pandas</div><div class="tech-desc">تحليل ومعالجة البيانات</div></div>
+    <div class="tech-card"><div class="tech-ico" style="background:rgba(220,38,38,0.12)">🔢</div><div class="tech-name">NumPy</div><div class="tech-desc">العمليات الحسابية</div></div>
+    <div class="tech-card"><div class="tech-ico" style="background:rgba(59,130,246,0.12)">🌲</div><div class="tech-name">Random Forest</div><div class="tech-desc">خوارزمية التصنيف الرئيسية</div></div>
+    <div class="tech-card"><div class="tech-ico" style="background:rgba(5,150,105,0.12)">⚖️</div><div class="tech-name">RobustScaler</div><div class="tech-desc">تطبيع وتجهيز البيانات</div></div>
+  </div>
+</div>
+
+<!-- ═══════════════ SLIDE 5 – HOW ═══════════════ -->
+<div class="slide" id="s5">
+  <div class="slbl a1">🔄 طريقة العمل</div>
+  <h2 class="stitle a2">من طلب القرض إلى قرار مدروس في أقل من ثانية</h2>
+  <div class="steps a3">
+    <div class="step"><div class="snum">١</div><div class="stit">إدخال البيانات</div><div class="sdesc">معلومات العميل، الدخل، التعليم، الجهة — مُعدّ للسوق التونسية</div></div>
+    <div class="step"><div class="snum">٢</div><div class="stit">تحليل AI فوري</div><div class="sdesc">النموذج يحلّل 9 عوامل ويحسب نسبة المخاطرة</div></div>
+    <div class="step"><div class="snum">٣</div><div class="stit">توصية واضحة</div><div class="sdesc">قبول أو رفض مع تفسير مفصّل لكل عامل</div></div>
+    <div class="step"><div class="snum">٤</div><div class="stit">حفظ وتتبع</div><div class="sdesc">سجل تاريخي كامل مع تصدير CSV وJSON</div></div>
+    <div class="step"><div class="snum">٥</div><div class="stit">تحليلات BI</div><div class="sdesc">لوحة بيانات تُظهر اتجاهات المحفظة بالكامل</div></div>
+  </div>
+  <div class="a4" style="margin-top:28px;max-width:820px;width:100%;background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.2);border-radius:14px;padding:16px 24px;display:flex;align-items:center;gap:14px">
+    <div style="font-size:28px">⏱️</div>
+    <div><div style="font-size:14px;font-weight:800;color:#fbbf24">زمن القرار: أقل من ثانية واحدة</div><div style="font-size:12px;color:rgba(255,255,255,0.45);margin-top:2px">مقارنة بيوم إلى أسبوع في المسارات التقليدية — تسريع بنسبة 99%</div></div>
+  </div>
+</div>
+
+<!-- ═══════════════ SLIDE 6 – BENEFITS ═══════════════ -->
+<div class="slide" id="s6">
+  <div class="slbl a1">💼 فوائد المؤسسة</div>
+  <h2 class="stitle a2">ماذا تكسب مؤسستك؟</h2>
+  <div class="ben-grid a3">
+    <div class="ben-card"><span class="ben-ico">📉</span><div class="ben-t">تقليل الخسائر</div><div class="ben-d">رصد القروض عالية المخاطرة قبل الموافقة يحدّ من الديون المعدومة</div><span class="ben-num">-40%</span><div class="ben-sl">انخفاض نسبة التعثر</div></div>
+    <div class="ben-card"><span class="ben-ico">⚡</span><div class="ben-t">قرار فوري</div><div class="ben-d">معالجة مئات الطلبات يومياً دون انتظار أو ضغط على الفريق</div><span class="ben-num">99%</span><div class="ben-sl">تسريع في وقت المعالجة</div></div>
+    <div class="ben-card"><span class="ben-ico">🎯</span><div class="ben-t">دقة لا تُضاهى</div><div class="ben-d">نموذج مُدرَّب على بيانات تونسية حقيقية يتجاوز التقييم البشري</div><span class="ben-num">95%+</span><div class="ben-sl">دقة التصنيف</div></div>
+    <div class="ben-card"><span class="ben-ico">📊</span><div class="ben-t">رؤية استراتيجية</div><div class="ben-d">لوحة بيانات تكشف الاتجاهات وتوزيع المخاطر وأنماط التعثر</div><span class="ben-num">360°</span><div class="ben-sl">تغطية كاملة للبيانات</div></div>
+    <div class="ben-card"><span class="ben-ico">🇹🇳</span><div class="ben-t">مُعدّ للسوق المحلية</div><div class="ben-d">15 جهة تونسية، 10 مستويات تعليمية، 8 أنواع وظائف — بيئة محلية حقيقية</div><span class="ben-num">100%</span><div class="ben-sl">توافق مع المعايير التونسية</div></div>
+    <div class="ben-card"><span class="ben-ico">💾</span><div class="ben-t">إدارة شاملة</div><div class="ben-d">إضافة وتعديل وحذف العملاء مع سجل توقعات وتصدير متعدد الصيغ</div><span class="ben-num">∞</span><div class="ben-sl">سجل تاريخي غير محدود</div></div>
+  </div>
+</div>
+
+<!-- ═══════════════ SLIDE 7 – UNIQUE ═══════════════ -->
+<div class="slide" id="s7">
+  <div class="slbl a1">✨ ما يميّزنا</div>
+  <h2 class="stitle a2">لماذا هذا المشروع مختلف؟</h2>
+  <div class="uniq-list a3">
+    <div class="uniq"><div class="unum">01</div><div class="utext"><h4>مُصمَّم خصيصاً للسوق التونسية بالكامل</h4><p>نظام التعليم التونسي بمستوياته العشرة، الجهات الـ15، وأنواع الوظائف المحلية — تجربة محلية حقيقية وليست مجرد ترجمة</p></div></div>
+    <div class="uniq"><div class="unum">02</div><div class="utext"><h4>دمج AI + BI + مساعد ذكي في منصة واحدة</h4><p>معظم الحلول تُقدّم إما التحليلات أو التوقعات — هذا النظام يجمعهما مع شات بوت متخصص في القروض</p></div></div>
+    <div class="uniq"><div class="unum">03</div><div class="utext"><h4>شفافية كاملة في القرار — لا صندوق أسود</h4><p>كل توقع مُصحوب بتفسير لنقاط القوة والضعف مع درجة تأثير كل عامل على القرار النهائي</p></div></div>
+    <div class="uniq"><div class="unum">04</div><div class="utext"><h4>جاهز للتشغيل الفوري بدون بنية تحتية معقدة</h4><p>يعمل مباشرة عبر المتصفح بدون خوادم ضخمة — استثمار منخفض وعائد مرتفع وسريع</p></div></div>
+  </div>
+</div>
+
+<!-- ═══════════════ SLIDE 8 – CTA ═══════════════ -->
+<div class="slide" id="s8">
+  <div class="cta-box a2">
+    <div class="cta-t">ابدأ تحويل قراراتك المالية اليوم</div>
+    <div class="cta-s">انضم إلى المؤسسات التي تثق بالذكاء الاصطناعي<br>لبناء محفظة قروض أكثر أماناً وربحية</div>
+    <button class="cta-btn" onclick="alert('تواصلوا مع Mouna Guirat لطلب العرض التجريبي!')">طلب عرض تجريبي مجاني ←</button>
+    <div class="cta-dev">
+      <div class="cta-devcard">
+        <div class="cdav">MG</div>
+        <div>
+          <div class="cdn">Mouna Guirat</div>
+          <div class="cdr">مهندسة ذكاء اصطناعي · مطورة حلول مالية ذكية · MG AI Solutions</div>
+        </div>
+        <div class="cdsep"></div>
+        <div class="cdlinks">
+          <a class="cdlink" href="mailto:mounaguirat10@gmail.com">✉ mounaguirat10@gmail.com</a>
+          <a class="cdlink" href="https://github.com/mounaguirat10" target="_blank">⌨ github.com/mounaguirat10</a>
+          <span style="font-size:10px;color:rgba(255,255,255,0.3)">🇹🇳 Tunisia · 2026</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- end #pres -->
+
+<!-- DOTS -->
+<div id="dots">
+  <div class="dot active" onclick="goTo(0)"></div>
+  <div class="dot" onclick="goTo(1)"></div>
+  <div class="dot" onclick="goTo(2)"></div>
+  <div class="dot" onclick="goTo(3)"></div>
+  <div class="dot" onclick="goTo(4)"></div>
+  <div class="dot" onclick="goTo(5)"></div>
+  <div class="dot" onclick="goTo(6)"></div>
+  <div class="dot" onclick="goTo(7)"></div>
+</div>
+
+<!-- CONTROLS -->
+<div id="controls">
+  <button onclick="prev()">›</button>
+  <span id="ctr">1 / 8</span>
+  <button onclick="next()">‹</button>
+  <button id="mbtn" onclick="toggleMusic()" title="موسيقى">♪</button>
+  <button onclick="toggleAuto()" id="abtn" title="تلقائي">▶</button>
+</div>
+
+<!-- TIMER -->
+<svg id="tring" viewBox="0 0 40 40" width="40" height="40">
+  <circle cx="20" cy="20" r="18"/>
+  <circle class="tp" cx="20" cy="20" r="18"/>
+</svg>
+
+<script>
+/* ══════════════════════════════════
+   ANIMATED CANVAS BACKGROUND
+══════════════════════════════════ */
+const canvas = document.getElementById('bg-canvas');
+const ctx = canvas.getContext('2d');
+let W, H, particles = [];
+
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+// ✅ جسيمات ذهبية ونحاسية دافئة — مختلفة تماماً عن الأزرق
+const COLORS = [
+  [245, 158, 11],   // amber gold
+  [251, 191, 36],   // bright gold
+  [194, 65,  12],   // copper/burnt orange
+  [253, 186, 116],  // peach gold
+  [220, 120,  20],  // warm orange
+];
+
+for (let i = 0; i < 70; i++) {
+  const c = COLORS[Math.floor(Math.random() * COLORS.length)];
+  particles.push({
+    x: Math.random() * 2200,
+    y: Math.random() * 1400,
+    r: Math.random() * 2.2 + 0.3,
+    vx: (Math.random() - 0.5) * 0.25,
+    vy: (Math.random() - 0.5) * 0.25,
+    alpha: Math.random() * 0.45 + 0.08,
+    cr: c[0], cg: c[1], cb: c[2],
+    // slow rotation/pulse
+    pulse: Math.random() * Math.PI * 2,
+    pulseSpeed: Math.random() * 0.015 + 0.005,
+  });
+}
+
+// Rotating ring shapes in background
+const rings = Array.from({length: 5}, () => ({
+  x: Math.random() * 1.4 - 0.2,
+  y: Math.random() * 1.4 - 0.2,
+  r: Math.random() * 180 + 80,
+  rot: Math.random() * Math.PI * 2,
+  rotSpeed: (Math.random() - 0.5) * 0.0008,
+  alpha: Math.random() * 0.06 + 0.02,
+  dash: Math.random() * 40 + 10,
+}));
+
+function drawBg() {
+  ctx.clearRect(0, 0, W, H);
+
+  // ── deep warm vignette gradients ──
+  // Central warm glow (amber)
+  const g1 = ctx.createRadialGradient(W * 0.25, H * 0.55, 0, W * 0.25, H * 0.55, W * 0.55);
+  g1.addColorStop(0, 'rgba(180,83,9,0.11)');
+  g1.addColorStop(0.5,'rgba(120,50,5,0.05)');
+  g1.addColorStop(1, 'rgba(8,5,2,0)');
+  ctx.fillStyle = g1; ctx.fillRect(0,0,W,H);
+
+  // Right copper glow
+  const g2 = ctx.createRadialGradient(W * 0.78, H * 0.35, 0, W * 0.78, H * 0.35, W * 0.45);
+  g2.addColorStop(0, 'rgba(194,65,12,0.09)');
+  g2.addColorStop(0.6,'rgba(120,40,5,0.04)');
+  g2.addColorStop(1, 'rgba(8,5,2,0)');
+  ctx.fillStyle = g2; ctx.fillRect(0,0,W,H);
+
+  // Bottom rose glow
+  const g3 = ctx.createRadialGradient(W * 0.5, H * 1.0, 0, W * 0.5, H * 1.0, W * 0.6);
+  g3.addColorStop(0, 'rgba(159,18,57,0.07)');
+  g3.addColorStop(1, 'rgba(8,5,2,0)');
+  ctx.fillStyle = g3; ctx.fillRect(0,0,W,H);
+
+  // ── rotating decorative rings ──
+  rings.forEach(ring => {
+    ring.rot += ring.rotSpeed;
+    ctx.save();
+    ctx.translate(ring.x * W, ring.y * H);
+    ctx.rotate(ring.rot);
+    ctx.beginPath();
+    ctx.arc(0, 0, ring.r, 0, Math.PI * 2);
+    ctx.setLineDash([ring.dash, ring.dash * 2]);
+    ctx.strokeStyle = `rgba(245,158,11,${ring.alpha})`;
+    ctx.lineWidth = 0.7;
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.restore();
+  });
+
+  // ── gold particles ──
+  particles.forEach(p => {
+    p.x += p.vx; p.y += p.vy;
+    p.pulse += p.pulseSpeed;
+    if (p.x < 0) p.x = W; if (p.x > W) p.x = 0;
+    if (p.y < 0) p.y = H; if (p.y > H) p.y = 0;
+    const a = p.alpha * (0.7 + 0.3 * Math.sin(p.pulse));
+    const r = p.r * (0.85 + 0.15 * Math.sin(p.pulse * 1.3));
+    // glow
+    const glow = ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,r*3.5);
+    glow.addColorStop(0, `rgba(${p.cr},${p.cg},${p.cb},${a * 0.6})`);
+    glow.addColorStop(1, `rgba(${p.cr},${p.cg},${p.cb},0)`);
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, r * 3.5, 0, Math.PI*2);
+    ctx.fillStyle = glow; ctx.fill();
+    // core
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, r, 0, Math.PI*2);
+    ctx.fillStyle = `rgba(${p.cr},${p.cg},${p.cb},${a})`;
+    ctx.fill();
+  });
+
+  // ── gold connecting lines ──
+  for (let i = 0; i < particles.length; i++) {
+    for (let j = i + 1; j < particles.length; j++) {
+      const dx = particles[i].x - particles[j].x;
+      const dy = particles[i].y - particles[j].y;
+      const d = Math.sqrt(dx*dx + dy*dy);
+      if (d < 130) {
+        ctx.beginPath();
+        ctx.strokeStyle = `rgba(245,158,11,${0.07 * (1 - d/130)})`;
+        ctx.lineWidth = 0.4;
+        ctx.moveTo(particles[i].x, particles[i].y);
+        ctx.lineTo(particles[j].x, particles[j].y);
+        ctx.stroke();
+      }
+    }
+  }
+  requestAnimationFrame(drawBg);
+}
+drawBg();
+
+/* ══════════════════════════════════
+   SLIDES ENGINE
+══════════════════════════════════ */
+const TOTAL = 8;
+const DURATION = 9000;
+let current = 0;
+let autoPlay = true;
+let timerPct = 0;
+let timerIv = null;
+
+function goTo(idx) {
+  const slides = document.querySelectorAll('.slide');
+  const dots = document.querySelectorAll('.dot');
+  slides[current].classList.remove('active');
+  slides[current].classList.add('exit');
+  const prev = current;
+  setTimeout(() => slides[prev].classList.remove('exit'), 700);
+  current = ((idx % TOTAL) + TOTAL) % TOTAL;
+  slides[current].classList.add('active');
+  dots.forEach((d, i) => d.classList.toggle('active', i === current));
+  document.getElementById('ctr').textContent = `${current + 1} / ${TOTAL}`;
+  document.getElementById('prog').style.width = ((current + 1) / TOTAL * 100) + '%';
+  resetTimer();
+}
+
+function next() { goTo(current + 1); }
+function prev() { goTo(current - 1); }
+
+function resetTimer() {
+  timerPct = 0;
+  clearInterval(timerIv);
+  const ring = document.querySelector('#tring .tp');
+  const circ = 113;
+  if (!autoPlay) { ring.style.strokeDashoffset = circ; return; }
+  timerIv = setInterval(() => {
+    timerPct += 100 / (DURATION / 100);
+    ring.style.strokeDashoffset = circ - (timerPct / 100) * circ;
+    if (timerPct >= 100) { clearInterval(timerIv); next(); }
+  }, 100);
+}
+
+function toggleAuto() {
+  autoPlay = !autoPlay;
+  document.getElementById('abtn').textContent = autoPlay ? '⏸' : '▶';
+  resetTimer();
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') next();
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') prev();
+  if (e.key === ' ') { e.preventDefault(); toggleAuto(); }
+  if (e.key === 'm' || e.key === 'M') toggleMusic();
+});
+
+/* ══════════════════════════════════
+   MUSIC ENGINE v3 — Lo-Fi Ambient هادئ
+   موسيقى محيطية ناعمة بدون نغمات حادة
+══════════════════════════════════ */
+let audioCtx = null;
+let masterGain = null;
+let musicPlaying = false;
+let loopTimeout = null;
+
+function initAudio() {
+  if (audioCtx) return;
+  audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  // Compressor لمنع الأصوات الحادة
+  const comp = audioCtx.createDynamicsCompressor();
+  comp.threshold.value = -20;
+  comp.knee.value = 10;
+  comp.ratio.value = 4;
+  comp.attack.value = 0.05;
+  comp.release.value = 0.4;
+  masterGain = audioCtx.createGain();
+  masterGain.gain.value = 0;
+  masterGain.connect(comp);
+  comp.connect(audioCtx.destination);
+}
+
+// إنشاء نغمة ناعمة مع envelope هادئ
+function softNote(freq, start, dur, vol, type='sine') {
+  if (!audioCtx || !musicPlaying) return;
+  const osc  = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  const filt = audioCtx.createBiquadFilter();
+
+  // Low-pass filter لإزالة الحدة
+  filt.type = 'lowpass';
+  filt.frequency.value = Math.min(freq * 3.5, 1800);
+  filt.Q.value = 0.5;
+
+  osc.type = type;
+  osc.frequency.value = freq;
+
+  const now = audioCtx.currentTime;
+  const t = now + start;
+  // Attack ناعم جداً — fadeIn طويل
+  gain.gain.setValueAtTime(0, t);
+  gain.gain.linearRampToValueAtTime(vol, t + dur * 0.35);
+  // Sustain ثم Release ناعم
+  gain.gain.linearRampToValueAtTime(vol * 0.6, t + dur * 0.7);
+  gain.gain.linearRampToValueAtTime(0, t + dur);
+
+  osc.connect(filt);
+  filt.connect(gain);
+  gain.connect(masterGain);
+  osc.start(t);
+  osc.stop(t + dur + 0.1);
+}
+
+// Pad — وتر ممتد ناعم
+function pad(freqs, start, dur, vol=0.04) {
+  freqs.forEach((f, i) => {
+    softNote(f, start + i * 0.08, dur, vol, 'sine');
+    // طبقة ثانية أعمق
+    softNote(f * 0.5, start, dur * 0.9, vol * 0.5, 'sine');
+  });
+}
+
+// Bass note هادئ
+function bassNote(freq, start, dur) {
+  softNote(freq, start, dur, 0.07, 'sine');
+  softNote(freq, start, dur, 0.04, 'triangle');
+}
+
+function playMusicLoop() {
+  if (!musicPlaying) return;
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+
+  // ═══ Lo-Fi Ambient في سلم Dm ناعم ═══
+  // الإيقاع: 60bpm — بطيء ومريح
+  const T = 1.0; // ثانية لكل beat
+  const B = T * 4; // bar = 4 beats
+
+  // ── PADS (وتريات ممتدة ناعمة) ──
+  // Dm  → Am  → Bb  → F  (chord progression هادئ)
+  pad([293.66, 349.23, 440.00], 0,    B * 1.9, 0.038); // Dm
+  pad([220.00, 261.63, 329.63], B,    B * 1.9, 0.035); // Am
+  pad([233.08, 293.66, 349.23], B*2,  B * 1.9, 0.038); // Bb
+  pad([174.61, 220.00, 261.63], B*3,  B * 1.9, 0.035); // F
+
+  // ── BASS (عميق وهادئ) ──
+  bassNote(73.42,  0,    B * 0.85); // D2
+  bassNote(55.00,  B,    B * 0.85); // A2
+  bassNote(58.27,  B*2,  B * 0.85); // Bb2
+  bassNote(43.65,  B*3,  B * 0.85); // F2
+
+  // ── MELODY (نغمة واحدة ناعمة بدون تكرار مزعج) ──
+  // نغمات قصيرة ومتباعدة — مثل قطرات ماء
+  [
+    [440.00, T*0.5,  T*0.7],   // A4
+    [392.00, T*2.2,  T*0.6],   // G4
+    [349.23, T*5.0,  T*0.8],   // F4
+    [329.63, T*7.5,  T*0.6],   // E4
+    [293.66, T*10.5, T*0.7],   // D4
+    [349.23, T*13.0, T*0.8],   // F4
+  ].forEach(([f, s, d]) => softNote(f, s, d, 0.028, 'sine'));
+
+  // ── TEXTURE (صوت محيطي خفيف جداً) ──
+  // sine بطيء جداً يشبه الهواء
+  softNote(110.00, 0,   B*4, 0.015, 'sine');  // A2 مستمر خفيف
+  softNote(146.83, B,   B*3, 0.010, 'sine');  // D3 خفيف
+  softNote(87.31,  B*2, B*2, 0.012, 'sine');  // F2 خفيف
+
+  const loopMs = B * 4 * 1000; // 16 beat loop
+  loopTimeout = setTimeout(() => {
+    if (musicPlaying) playMusicLoop();
+  }, loopMs - 300);
+}
+
+function toggleMusic() {
+  initAudio();
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+  const btn = document.getElementById('mbtn');
+
+  if (!musicPlaying) {
+    musicPlaying = true;
+    btn.textContent = '♫';
+    btn.classList.add('on');
+    // Fade in ناعم جداً — 3 ثواني
+    masterGain.gain.cancelScheduledValues(audioCtx.currentTime);
+    masterGain.gain.setValueAtTime(0, audioCtx.currentTime);
+    masterGain.gain.linearRampToValueAtTime(0.55, audioCtx.currentTime + 3.0);
+    playMusicLoop();
+  } else {
+    musicPlaying = false;
+    clearTimeout(loopTimeout);
+    // Fade out ناعم — 2 ثانية
+    masterGain.gain.cancelScheduledValues(audioCtx.currentTime);
+    masterGain.gain.setValueAtTime(masterGain.gain.value, audioCtx.currentTime);
+    masterGain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 2.0);
+    btn.textContent = '♪';
+    btn.classList.remove('on');
+  }
+}
+
+// Init
+resetTimer();
+</script>
+</body>
+</html>
